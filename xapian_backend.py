@@ -583,6 +583,9 @@ class SearchBackend(BaseSearchBackend):
         vrp = XHValueRangeProcessor(self)
         qp.add_valuerangeprocessor(vrp)
         
+        query_string = query_string.replace('$', ' usd ')
+        query_string = query_string.replace('+', ' plus ')
+        query_string = ' '.join(query_string.split(' '))
         return qp.parse_query(query_string, flags)
     
     def build_schema(self, fields):
@@ -1220,6 +1223,10 @@ def _marshal_value(value):
     elif isinstance(value, (int, long)):
         value = u'%012d' % value
     else:
+        if value:
+            value = value.replace('$', 'usd')
+            value = value.replace('+', ' plus ')
+            value = ' '.join(value.split())
         value = force_unicode(value).lower()
     return value
 
@@ -1233,6 +1240,10 @@ def _marshal_term(term):
     elif isinstance(term, datetime.date):
         term = _marshal_date(term)
     else:
+        if term:
+            term = term.replace('$', 'usd')
+            term = term.replace('+', ' plus ')
+            term = ' '.join(term.split())
         term = force_unicode(term).lower()
     return term
 
