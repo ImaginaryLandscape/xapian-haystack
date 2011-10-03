@@ -11,6 +11,7 @@ import re
 import shutil
 import sys
 import warnings
+from decimal import Decimal
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -585,6 +586,7 @@ class SearchBackend(BaseSearchBackend):
         
         query_string = query_string.replace('$', ' usd ')
         query_string = query_string.replace('+', ' plus ')
+        
         query_string = ' '.join(query_string.split(' '))
         return qp.parse_query(query_string, flags)
     
@@ -1239,6 +1241,8 @@ def _marshal_term(term):
         term = _marshal_datetime(term)
     elif isinstance(term, datetime.date):
         term = _marshal_date(term)
+    elif type(term) in [int, float, Decimal]:
+        term = force_unicode(term)
     else:
         if term:
             term = term.replace('$', 'usd')
