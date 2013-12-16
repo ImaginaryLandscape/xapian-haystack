@@ -586,6 +586,7 @@ class SearchBackend(BaseSearchBackend):
         
         query_string = query_string.replace('$', ' usd ')
         query_string = query_string.replace('+', ' plus ')
+        query_string = query_string.replace("'s", '')
         
         query_string = ' '.join(query_string.split(' '))
         return qp.parse_query(query_string, flags)
@@ -1228,6 +1229,7 @@ def _marshal_value(value):
         if value:
             value = value.replace('$', 'usd')
             value = value.replace('+', ' plus ')
+            value = value.replace("'s", '')
             value = ' '.join(value.split())
         value = force_unicode(value).lower()
     return value
@@ -1247,6 +1249,7 @@ def _marshal_term(term):
         if term:
             term = term.replace('$', 'usd')
             term = term.replace('+', ' plus ')
+            term = term.replace("'s", '')
             term = ' '.join(term.split())
         term = force_unicode(term).lower()
     return term
